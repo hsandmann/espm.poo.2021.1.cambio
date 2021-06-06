@@ -3,6 +3,7 @@ package br.espm.poo.cambio;
 import br.espm.poo.cambio.common.controller.CambioController;
 import br.espm.poo.cambio.common.datatype.Cotacao;
 import br.espm.poo.cambio.common.datatype.Moeda;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -12,19 +13,12 @@ import java.util.UUID;
 @RestController
 public class CambioResource implements CambioController {
 
+    @Autowired
+    private MoedaService moedaService;
+
     @Override
     public List<Moeda> moedas() {
-        // TODO: falta acessar o database
-        List<Moeda> moedas = new ArrayList<>();
-        Moeda m1 = new Moeda();
-        m1.setId(UUID.randomUUID().toString());
-        m1.setNome("Real");
-        Moeda m2 = new Moeda();
-        m2.setId(UUID.randomUUID().toString());
-        m2.setNome("Dolar");
-        moedas.add(m1);
-        moedas.add(m2);
-        return moedas;
+        return moedaService.listAll();
     }
 
     @Override
