@@ -30,4 +30,11 @@ public class MoedaService {
                 .orElse(null);
     }
 
+    public Moeda findBySimbolo(String simbolo) {
+        return moedaRepository
+                .findBySimbolo(simbolo)
+                .map(MoedaModel::to)
+                .orElse(null);
+    }
+
 }
