@@ -19,10 +19,12 @@ public class CotacaoService {
     private CotacaoRepository cotacaoRepository;
 
     public Cotacao findById(String id) {
-        return cotacaoRepository
-                .findById(id)
-                .map(CotacaoModel::to)
-                .orElse(null);
+        return fill(
+                cotacaoRepository
+                        .findById(id)
+                        .map(CotacaoModel::to)
+                        .orElse(null)
+        );
     }
 
     public Cotacao findBy(String idMoeda, Date data) {
@@ -41,10 +43,7 @@ public class CotacaoService {
                 .findFirst()
                 .orElse(null);
         // Aqui esta sendo feito um relacionamento
-        if (cotacao != null) {
-            cotacao.setMoeda(moedaService.findBy(UUID.fromString(cotacao.getMoeda().getId())));
-        }
-        return cotacao;
+        return fill(cotacao);
     }
 
     public List<Cotacao> listBy(String idMoeda, Date dtInicio, Date dtFim) {
@@ -52,6 +51,13 @@ public class CotacaoService {
                 .listBy(idMoeda, dtInicio, dtFim).stream()
                 .map(CotacaoModel::to)
                 .collect(Collectors.toList());
+    }
+
+    private Cotacao fill(Cotacao c) {
+        if (c != null) {
+            c.setMoeda(moedaService.findBy(UUID.fromString(c.getMoeda().getId())));
+        }
+        return c;
     }
 
 }
